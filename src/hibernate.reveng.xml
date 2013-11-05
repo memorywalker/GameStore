@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+<type-mapping>
+	<sql-type jdbc-type="INTEGER" hibernate-type="integer"
+		not-null="true">
+	</sql-type>
+</type-mapping>
+
+<table-filter match-name="company" match-catalog="gamestore"></table-filter>
+	<table-filter match-catalog="gamestore" match-name="game" />
+<table catalog="gamestore" name="company">
+	<primary-key>
+	      <generator class="increment"></generator>
+        <key-column name="id"></key-column>
+	</primary-key>
+	<column name="name"></column>
+</table>
+<table catalog="gamestore" name="game">
+	<primary-key>
+		<generator class="increment"></generator>
+		<key-column name="id"></key-column>
+	</primary-key>
+	<column name="name"></column>
+	<column name="type"></column>
+	<column name="company_id"></column>
+</table>
+</hibernate-reverse-engineering>

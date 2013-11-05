@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        <hibernate-mapping package="com.aquar.game.database">
+    <class name="Game" table="game" catalog="gamestore">
+        <id name="id" column="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <many-to-one name="company" class="Company" fetch="select">
+            <column name="company_id"/>
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="50" />
+        </property>
+        <property name="type" type="integer">
+            <column name="type" />
+        </property>
+    </class>
+</hibernate-mapping>
