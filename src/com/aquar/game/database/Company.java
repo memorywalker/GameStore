@@ -55,5 +55,10 @@ public class Company implements java.io.Serializable {
     public void setGames(Set games) {
         this.games = games;
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

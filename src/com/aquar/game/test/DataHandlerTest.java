@@ -45,7 +45,6 @@ public class DataHandlerTest extends TestCase {
         List<Company> list = DataHandler.getInstance().query(new Company());
         assertNotNull(list);
         assertFalse(list.isEmpty());
-        assertTrue(true);
     }
 
 }

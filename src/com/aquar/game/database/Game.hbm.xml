@@ -7,7 +7,7 @@
         <id name="id" column="id" type="integer">
             <generator class="increment"/>
         </id>
-        <many-to-one name="company" class="Company" fetch="select">
+        <many-to-one name="company" class="Company" fetch="select" lazy="false">
             <column name="company_id"/>
         </many-to-one>
         <property name="name" type="string">
