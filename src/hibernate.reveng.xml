@@ -24,6 +24,7 @@
 	</primary-key>
 	<column name="name"></column>
 	<column name="type"></column>
+	<column name="release_date"></column>
 	<column name="company_id"></column>
 </table>
 </hibernate-reverse-engineering>

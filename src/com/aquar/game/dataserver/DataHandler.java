@@ -1,5 +1,6 @@
 package com.aquar.game.dataserver;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -32,21 +33,26 @@ public class DataHandler {
         sessionFactory = cfg.buildSessionFactory(new ServiceRegistryBuilder().applySettings(cfg.getProperties()).buildServiceRegistry());
     }
     
-    public <T> boolean save(List<T> objs) {
+    public boolean save(Object obj) {
         boolean ret = false;
         Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
             int count = 0;
-            for (T obj : objs) {
-                session.save(obj);
-                count++;
-                if (count == 20) { //20, same as the JDBC batch size
-                    //flush a batch of inserts and release memory:
-                    session.flush();
-                    session.clear();
-                    count = 0;
+            if (obj instanceof Collection<?>) {
+                List<?> list = (List<?>) obj;
+                for (Object item : list) {
+                    session.save(item);
+                    count++;
+                    if (count == 20) { //20, same as the JDBC batch size
+                        //flush a batch of inserts and release memory:
+                        session.flush();
+                        session.clear();
+                        count = 0;
+                    }
                 }
+            } else {
+                session.save(obj);
             }
             
             session.getTransaction().commit();

@@ -1,10 +1,16 @@
-package com.aquar.game.main.ui.table;
+package com.aquar.game.ui.table;
+
+import java.util.List;
+
+import com.aquar.game.database.Game;
+import com.aquar.game.dataserver.DataHandler;
 
 public class GameListCtrl {
     private GameListTableModel dataModel;
     
+    
     public GameListCtrl() {
-        // TODO Auto-generated constructor stub
+        
     }
     
     public GameListTableModel getDataModel() {
@@ -21,5 +27,10 @@ public class GameListCtrl {
     
     public boolean isEditable() {
         return ((GameListTableModel) this.dataModel).isEditable();
+    }
+
+    public void refreshData() {
+        List<Game> gameList = DataHandler.getInstance().query(new Game());
+        dataModel.initData(gameList);
     }
 }

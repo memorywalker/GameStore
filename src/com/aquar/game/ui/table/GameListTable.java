@@ -1,4 +1,4 @@
-package com.aquar.game.main.ui.table;
+package com.aquar.game.ui.table;
 
 import javax.swing.JTable;
 

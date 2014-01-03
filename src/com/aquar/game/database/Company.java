@@ -1,6 +1,6 @@
 package com.aquar.game.database;
 
-// Generated Nov 3, 2013 7:49:14 PM by Hibernate Tools 4.0.0
+// Generated Jan 3, 2014 2:58:47 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,10 +10,6 @@ import java.util.Set;
  */
 public class Company implements java.io.Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1544255372285741722L;
     private Integer id;
     private String name;
     private Set games = new HashSet(0);
@@ -21,13 +17,11 @@ public class Company implements java.io.Serializable {
     public Company() {
     }
 
-    public Company(Integer id, String name) {
-        this.id = id;
+    public Company(String name) {
         this.name = name;
     }
 
-    public Company(Integer id, String name, Set games) {
-        this.id = id;
+    public Company(String name, Set games) {
         this.name = name;
         this.games = games;
     }
@@ -58,6 +52,7 @@ public class Company implements java.io.Serializable {
     
     @Override
     public String toString() {
+        // TODO Auto-generated method stub
         return name;
     }
 

@@ -1,12 +1,10 @@
-package com.aquar.game.main.ui.table;
+package com.aquar.game.ui.table;
 
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
-
 import com.aquar.game.database.Game;
-import com.aquar.game.dataserver.DataHandler;
 
 public class GameListTableModel extends DefaultTableModel {
     public static final int COL_NAME = 0;
@@ -18,16 +16,15 @@ public class GameListTableModel extends DefaultTableModel {
     
     public GameListTableModel() {
         initColNames();
-        initData();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void initData() {
-        List<Game> gameList = DataHandler.getInstance().query(new Game());
+    public void initData(List<Game> gameList) {
+        dataVector.clear();
         if (gameList != null) {
             for (Game game : gameList) {
                 Vector rowVector = new Vector();
-                rowVector.add(COL_NAME, game.getName());
+                rowVector.add(COL_NAME, game);
                 rowVector.add(COL_TYPE, game.getType());
                 rowVector.add(COL_DATE, "");
                 rowVector.add(COL_COMPANY, game.getCompany());
@@ -35,6 +32,7 @@ public class GameListTableModel extends DefaultTableModel {
                 dataVector.add(rowVector);
             }
         }
+        fireTableDataChanged();
     }
 
     @SuppressWarnings("unchecked")
