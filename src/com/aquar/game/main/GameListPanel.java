@@ -8,15 +8,27 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import org.hibernate.internal.jaxb.mapping.orm.JaxbTable;
+
+import com.aquar.game.database.Company;
+import com.aquar.game.database.EnumGameType;
+import com.aquar.game.dataserver.DataCache;
 import com.aquar.game.ui.dialog.NewGameDialog;
+import com.aquar.game.ui.table.CustomCellEditor;
 import com.aquar.game.ui.table.GameListCtrl;
 import com.aquar.game.ui.table.GameListTable;
 import com.aquar.game.ui.table.GameListTableModel;
@@ -45,10 +57,23 @@ public class GameListPanel {
         mContainer.add(titleLabel, gbc);
         
         // JTable must be in a JScrollPane
-        GameListTable gameTable = new GameListTable();
-        gameTable.setModel(new GameListTableModel());
+        final GameListTable gameTable = new GameListTable();
+        GameListTableModel model = new GameListTableModel();
+        gameTable.setModel(model);
+        EnumGameType[] types = EnumGameType.values();
+        JComboBox<EnumGameType> typeBox = new JComboBox<EnumGameType>(types);
+        gameTable.getColumnModel().getColumn(GameListTableModel.COL_TYPE).setCellEditor(new CustomCellEditor(typeBox));
+        JComboBox<Company> companyBox = new JComboBox<>();
+        List<Company> companies = DataCache.getInstance().getComanies();
+        if (companies != null) {
+            companyBox.setModel(
+                    new DefaultComboBoxModel<Company>(
+                            (Company[]) companies.toArray(new Company[companies.size()])));
+        }
+        gameTable.getColumnModel().getColumn(GameListTableModel.COL_COMPANY).setCellEditor(new CustomCellEditor(companyBox));
+        gameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         final GameListCtrl ctrl = new GameListCtrl();
-        ctrl.setDataModel((GameListTableModel) gameTable.getModel());
+        ctrl.setDataModel(model);
         ctrl.refreshData();
         JScrollPane scrollPane = new JScrollPane(gameTable);
         gbc.fill = GridBagConstraints.BOTH;
@@ -116,6 +141,14 @@ public class GameListPanel {
         gbc.gridx = 3;
         gbc.gridy = 2;
         mContainer.add(delBtn, gbc);
+        delBtn.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int rowIdx = gameTable.getSelectedRow();
+                ctrl.delSelectRow(gameTable.convertRowIndexToModel(rowIdx));
+            }
+        });
         
     }
 }

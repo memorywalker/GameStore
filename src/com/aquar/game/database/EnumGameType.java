@@ -9,29 +9,47 @@ package com.aquar.game.database;
  */
 public enum EnumGameType {
     // Action Game
-    ACT,
+    ACT("Action Game"),
     // Shooting Game
-    STG,
+    STG("Shooting Game"),
     // Fighting Game
-    FTG,
+    FTG("Fighting Game"),
     //Adventure Game
-    AVG,
+    AVG("Adventure Game"),
     // Simulation Game
-    SLG,
+    SLG("Simulation Game"),
     // Role-playing game
-    RPG,
+    RPG("Role-playing game"),
     // Strategy Game
-    STRATEGY,
+    STRATEGY("Strategy Game"),
     // Sports Game
-    SPORT,
+    SPORT("Sports Game"),
     // Racing Game
-    RACING,
+    RACING("Racing Game"),
     // Casual Game
-    CASUAL,
+    CASUAL("Casual Game"),
     // Music Game
-    MUSIC,
+    MUSIC("Music Game"),
     //Multiplayer Online Game
-    MMOG;
+    MMOG("Music Game");
     
+    private String name;
     
+    EnumGameType(String name) {
+        this.name = name;
+    }
+ 
+    public static EnumGameType getEnum(int idx) {
+        if (idx < values().length) {
+            return values()[idx];
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return name;
+    }
 }

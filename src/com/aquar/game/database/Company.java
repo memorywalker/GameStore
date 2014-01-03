@@ -56,4 +56,14 @@ public class Company implements java.io.Serializable {
         return name;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        boolean ret = false;
+        if (this == obj) {
+            ret = true;
+        } else if (obj instanceof Company) {
+            ret = this.name.equals(((Company) obj).getName());
+        } 
+        return ret;
+    }
 }

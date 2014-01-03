@@ -33,4 +33,13 @@ public class GameListCtrl {
         List<Game> gameList = DataHandler.getInstance().query(new Game());
         dataModel.initData(gameList);
     }
+    
+    /**
+     * @param row row of model, not the JTable.
+     */
+    public void delSelectRow(int row) {
+        Game game = (Game) dataModel.getSelectObject(row);
+        DataHandler.getInstance().delete(game);
+        dataModel.removeRow(row);
+    }
 }
