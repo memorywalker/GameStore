@@ -1,7 +1,14 @@
 package com.aquar.game.ulti;
 
 import java.awt.Font;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Ultility {
-    public static final Font FONT_NORMAL = new Font("Times New Roman", Font.PLAIN, 14);
+    
+    public static String getDateStr(Date date) {
+        String format = "yyyy/MM/dd";
+        String ret = new SimpleDateFormat(format).format(date);
+        return ret;
+    }
 }

@@ -42,7 +42,7 @@ public class DataHandler {
             if (obj instanceof Collection<?>) {
                 List<?> list = (List<?>) obj;
                 for (Object item : list) {
-                    session.save(item);
+                    session.saveOrUpdate(item);
                     count++;
                     if (count == 20) { //20, same as the JDBC batch size
                         //flush a batch of inserts and release memory:
@@ -52,7 +52,7 @@ public class DataHandler {
                     }
                 }
             } else {
-                session.save(obj);
+                session.saveOrUpdate(obj);
             }
             
             session.getTransaction().commit();

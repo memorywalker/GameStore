@@ -31,7 +31,7 @@ public enum EnumGameType {
     // Music Game
     MUSIC("Music Game"),
     //Multiplayer Online Game
-    MMOG("Music Game");
+    MMOG("Multiplayer Online Game");
     
     private String name;
     

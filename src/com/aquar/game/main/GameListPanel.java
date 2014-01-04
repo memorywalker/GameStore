@@ -8,6 +8,8 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -27,11 +29,13 @@ import org.hibernate.internal.jaxb.mapping.orm.JaxbTable;
 import com.aquar.game.database.Company;
 import com.aquar.game.database.EnumGameType;
 import com.aquar.game.dataserver.DataCache;
+import com.aquar.game.ui.dialog.DatePickerDialog;
 import com.aquar.game.ui.dialog.NewGameDialog;
 import com.aquar.game.ui.table.CustomCellEditor;
 import com.aquar.game.ui.table.GameListCtrl;
 import com.aquar.game.ui.table.GameListTable;
 import com.aquar.game.ui.table.GameListTableModel;
+import com.aquar.game.ulti.Ultility;
 
 public class GameListPanel {
     private JPanel mContainer;
@@ -60,18 +64,7 @@ public class GameListPanel {
         final GameListTable gameTable = new GameListTable();
         GameListTableModel model = new GameListTableModel();
         gameTable.setModel(model);
-        EnumGameType[] types = EnumGameType.values();
-        JComboBox<EnumGameType> typeBox = new JComboBox<EnumGameType>(types);
-        gameTable.getColumnModel().getColumn(GameListTableModel.COL_TYPE).setCellEditor(new CustomCellEditor(typeBox));
-        JComboBox<Company> companyBox = new JComboBox<>();
-        List<Company> companies = DataCache.getInstance().getComanies();
-        if (companies != null) {
-            companyBox.setModel(
-                    new DefaultComboBoxModel<Company>(
-                            (Company[]) companies.toArray(new Company[companies.size()])));
-        }
-        gameTable.getColumnModel().getColumn(GameListTableModel.COL_COMPANY).setCellEditor(new CustomCellEditor(companyBox));
-        gameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        initTable(gameTable);
         final GameListCtrl ctrl = new GameListCtrl();
         ctrl.setDataModel(model);
         ctrl.refreshData();
@@ -150,5 +143,41 @@ public class GameListPanel {
             }
         });
         
+    }
+
+    private void initTable(final GameListTable gameTable) {
+        EnumGameType[] types = EnumGameType.values();
+        JComboBox<EnumGameType> typeBox = new JComboBox<EnumGameType>(types);
+        gameTable.getColumnModel().getColumn(GameListTableModel.COL_TYPE).setCellEditor(new CustomCellEditor(typeBox));
+        
+        JComboBox<Company> companyBox = new JComboBox<>();
+        List<Company> companies = DataCache.getInstance().getComanies();
+        if (companies != null) {
+            companyBox.setModel(
+                    new DefaultComboBoxModel<Company>(
+                            (Company[]) companies.toArray(new Company[companies.size()])));
+        }
+        gameTable.getColumnModel().getColumn(GameListTableModel.COL_COMPANY).setCellEditor(new CustomCellEditor(companyBox));
+        gameTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        gameTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int col = gameTable.columnAtPoint(e.getPoint());
+                    int row = gameTable.rowAtPoint(e.getPoint());
+                    if (GameListTableModel.COL_DATE == col) {
+                        Window parentWindow = SwingUtilities
+                                .windowForComponent(mContainer);
+                        DatePickerDialog dialog = new DatePickerDialog(parentWindow);
+                        dialog.setVisible(true);
+                        if (dialog.isChanged()) {
+                            gameTable.setValueAt(dialog.getDateValue().getTime(), row, col);
+                        }
+                    }
+                }
+                super.mousePressed(e);
+            }
+        });
     }
 }

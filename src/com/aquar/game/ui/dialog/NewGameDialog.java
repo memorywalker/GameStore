@@ -30,9 +30,10 @@ import com.aquar.game.database.EnumGameType;
 import com.aquar.game.database.Game;
 import com.aquar.game.dataserver.DataCache;
 import com.aquar.game.dataserver.DataHandler;
+import com.aquar.game.ulti.Ultility;
 
 public class NewGameDialog extends JDialog {
-    
+    private Date releaseDate;
     public NewGameDialog(JFrame owner) {
         super(owner, "New Game", true);
         setLocationRelativeTo(owner);
@@ -53,7 +54,19 @@ public class NewGameDialog extends JDialog {
         addItemInput("Type", typeBox, formPanel, gbc);
         
         gbc.gridy = 2;
-        JButton dateBtn = new JButton("Date");
+        final JButton dateBtn = new JButton("Date");
+        dateBtn.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DatePickerDialog dialog = new DatePickerDialog(NewGameDialog.this);
+                dialog.setVisible(true);
+                if (dialog.isChanged()) {
+                    releaseDate = dialog.getDateValue().getTime();
+                    dateBtn.setText(Ultility.getDateStr(releaseDate));
+                }
+            }
+        });
         addItemInput("ReleaseDate", dateBtn, formPanel, gbc);
         
         gbc.gridy = 3;
@@ -79,11 +92,16 @@ public class NewGameDialog extends JDialog {
                 String name = nameField.getText().trim();
                 if (name.isEmpty()) {
                     dispose();
+                    return;
                 }
                 Game game = new Game();
                 game.setCompany((Company) companyBox.getSelectedItem());
                 game.setName(name);
-                game.setReleaseDate(new Date());
+                if (releaseDate != null) {
+                    game.setReleaseDate(releaseDate);
+                } else {
+                    
+                }
                 game.setType(((EnumGameType)typeBox.getSelectedItem()).ordinal());
                 DataHandler.getInstance().save(game);
                 dispose();
@@ -92,6 +110,14 @@ public class NewGameDialog extends JDialog {
         
         JButton cancelBtn = new JButton("Cancel");
         bottomPanel.add(cancelBtn);
+        cancelBtn.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                
+            }
+        });;
         
         getContentPane().add(bottomPanel, BorderLayout.SOUTH);
         pack();
