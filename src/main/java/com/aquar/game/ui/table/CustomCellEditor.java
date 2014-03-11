@@ -29,5 +29,4 @@ public class CustomCellEditor extends DefaultCellEditor {
         }
         return com;
     }
-
 }

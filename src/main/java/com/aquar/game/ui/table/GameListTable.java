@@ -8,7 +8,5 @@ public class GameListTable extends JTable {
         putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         setDefaultRenderer(Object.class, new CustomCellRender());
         setRowHeight(26);
-    }
-    
-    
+    }       
 }
